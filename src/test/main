@@ -1,0 +1,23 @@
+#include <stdio.h>
+#include <string.h>
+#include "../shape.h"
+
+//******************************************************************************
+
+
+int main (int argc, const char **argv)
+{
+	Shape *I = I_New () ;
+
+	// backup shape original position
+	Point blocks[I->n_blocks] ;
+	memcpy (blocks, I->blocks, sizeof(Point) * I->n_blocks) ;
+
+	// rotate shape by PI/2 counter clockwise
+	Shape_Rotate (I, COUNTER_CLOCKWISE) ;
+
+	// shape pivot should not move
+
+	Shape_Free (&I) ;
+}
+
