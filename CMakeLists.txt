@@ -63,6 +63,17 @@ if ( NOT CMAKE_BUILD_TYPE )
 endif ( )
 
 #-------------------------------------------------------------------------------
+# find the Curses library
+#-------------------------------------------------------------------------------
+
+set (CURSES_NEED_NCURSES TRUE)
+find_package(Curses)
+include_directories (${CURSES_INCLUDE_DIRS})
+
+#message ( STATUS "CURSES_INCLUDE_DIRS:       " ${CURSES_INCLUDE_DIRS} )
+#message ( STATUS "CURSES_LIBRARIES:       " ${CURSES_LIBRARIES} )
+
+#-------------------------------------------------------------------------------
 # report status
 #-------------------------------------------------------------------------------
 

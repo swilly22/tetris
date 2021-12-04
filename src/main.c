@@ -17,8 +17,6 @@ int main
 
 	Game_Loop (game) ;
 
-	printf ("score: %d\n", game->score) ;
-
 	Game_Free (&game) ;
 }	
 

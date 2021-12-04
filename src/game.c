@@ -1,17 +1,17 @@
 #include "game.h"
 #include "tetris.h"
-#include "screen.h"
 #include <math.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <unistd.h>
+#include <ncurses.h>
 #include <sys/select.h>
 
 // key codes
-#define SPACE        32
-#define LEFT_ARROW   37
-#define RIGHT_ARROW  39
-#define DOWN_ARROW   40
+#define SPACE        ' '
+#define LEFT_ARROW   'a'
+#define RIGHT_ARROW  'd'
+#define DOWN_ARROW   's'
 
 // number of miliseconds between each timeout
 #define INTERVAL_MS  200
@@ -40,7 +40,8 @@ void Game_Loop
 (
 	Game *game
 ) {
-	SCREEN_CLEAR () ;
+	// init ncurses
+	initscr () ;
 
 	//---------------------------------------------------------------------
 	// random shape queue
@@ -97,13 +98,11 @@ void Game_Loop
 			FD_ZERO (&rfds) ;
 			FD_SET (STDIN_FILENO, &rfds) ;
 
-			//retval = select (1, &rfds, NULL, NULL, &tv) ;
-			retval = select (STDIN_FILENO + 1, &rfds, NULL, NULL, NULL) ;
-			printf ("retval: %d\n", retval) ;
-			assert (retval != -1) ;
+			retval = select (STDIN_FILENO + 1, &rfds, NULL, NULL, &tv) ;
+			//retval = select (STDIN_FILENO + 1, &rfds, NULL, NULL, NULL) ;
+			// assert (retval != -1) ;
 			if (retval)
 			{
-				printf ("user input\n") ;
 				//---------------------------------------------
 				// user input
 				//---------------------------------------------
@@ -111,11 +110,10 @@ void Game_Loop
 				assert (FD_ISSET(0, &rfds) == true) ;
 				//printf ("sec: %ld, usec: %d\n", tv.tv_sec, tv.tv_usec) ;
 				read (STDIN_FILENO, &key, 1) ;
-				printf ("key: %d\n", key) ;
 			}
 			else
 			{
-				printf ("timeout\n") ;
+				// printf ("timeout\n") ;
 				//---------------------------------------------
 				// timeout
 				//---------------------------------------------
@@ -206,6 +204,9 @@ void Game_Loop
 	// free shapes in queue
 	Shape_Free (&random_shapes[0]) ;
 	Shape_Free (&random_shapes[1]) ;
+
+	// clean up ncurses
+	endwin () ;
 }
 
 void Game_Free

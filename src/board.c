@@ -1,8 +1,8 @@
 #include "board.h"
-#include "screen.h"
 #include "tetris.h"
 #include <stdlib.h>
 #include <string.h>
+#include <ncurses.h>
 
 #define ROW(board, row) (board + (BOARD_WIDTH * (row)))
 
@@ -159,26 +159,31 @@ void Board_Print
 ) {
 	ASSERT_NOT_NULL (board) ;
 
-	SCREEN_GOTO (0, 0) ; 
+	move (0, 0) ;
 
 	// print board
 	for (int row = BOARD_HEIGHT ; row >= 0 ; row--)
 	{
 		for (int col = 0 ; col < BOARD_WIDTH ; col++)
 		{
+			char c;
 			if (ROW(board, row)[col])
 			{
 				// entry is SET
-				printf ("*") ;
+				c = '*' ;
 			}
 			else
 			{
 				// entry is CLEAR
-				printf (".") ;
+				c = '.' ;
 			}
+			// adjust row offset, screen top left is 0,0
+			mvprintw (BOARD_HEIGHT - row, col, "%c", c) ;
 		}
-		printf ("\n") ;
 	}
+
+	// refresh output
+	refresh () ;
 }
 
 void Board_Free

@@ -17,10 +17,9 @@ SET_TARGET_PROPERTIES ( tetris_static PROPERTIES
 	C_STANDARD_REQUIRED 11 )
 set_property ( TARGET tetris_static PROPERTY C_STANDARD 11 )
 
-
 #-------------------------------------------------------------------------------
 # Tetrix executable
 #-------------------------------------------------------------------------------
-add_executable ( tetris_exec main.c )
-target_link_libraries( tetris_exec tetris_static )
+target_link_libraries ( tetris_static ${CURSES_LIBRARIES} )
+target_link_libraries ( tetris tetris_static)
 
